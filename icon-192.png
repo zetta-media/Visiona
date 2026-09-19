@@ -1,0 +1,49 @@
+from PIL import Image, ImageDraw
+
+def create_visiona_icon(size):
+    # Buat kanvas dengan latar belakang biru gelap kontras tinggi (#0F172A)
+    image = Image.new("RGBA", (size, size), color=(15, 23, 42, 255))
+    draw = ImageDraw.Draw(image)
+    
+    center = size / 2
+    
+    # 1. Gambar Bentuk Mata (Lensa Aksesibilitas)
+    eye_width = size * 0.7
+    eye_height = size * 0.38
+    bbox = [center - eye_width/2, center - eye_height/2, center + eye_width/2, center + eye_height/2]
+    
+    # Kelopak mata putih tebal
+    draw.arc(bbox, start=200, end=340, fill=(255, 255, 255, 255), width=int(size * 0.05))
+    draw.arc(bbox, start=20, end=160, fill=(255, 255, 255, 255), width=int(size * 0.05))
+    
+    # 2. Gambar Pupil / Iris AI (Cyan Cerah & Kuning Kontras)
+    iris_radius = size * 0.16
+    draw.ellipse(
+        [center - iris_radius, center - iris_radius, center + iris_radius, center + iris_radius],
+        fill=(0, 229, 255, 255) # Cyan cerah (#00E5FF)
+    )
+    
+    pupil_radius = size * 0.08
+    draw.ellipse(
+        [center - pupil_radius, center - pupil_radius, center + pupil_radius, center + pupil_radius],
+        fill=(250, 204, 21, 255) # Kuning kontras (#FACC15)
+    )
+    
+    # 3. Cahaya Visi
+    glow_radius = size * 0.03
+    draw.ellipse(
+        [center - pupil_radius + glow_radius, center - pupil_radius + glow_radius, 
+         center - pupil_radius + glow_radius*3, center - pupil_radius + glow_radius*3],
+        fill=(255, 255, 255, 255)
+    )
+    
+    return image
+
+# Generate kedua ikon
+icon_192 = create_visiona_icon(192)
+icon_192.save("icon-192.png", "PNG")
+
+icon_512 = create_visiona_icon(512)
+icon_512.save("icon-512.png", "PNG")
+
+print("File 'icon-192.png' dan 'icon-512.png' berhasil dibuat!")
